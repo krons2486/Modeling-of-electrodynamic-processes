@@ -81,12 +81,11 @@ phi = 0  # начальная фаза
 
 for q in range(1, maxT):
     # Обновление Hy
-    Hy[:-1] = Hy[:-1] + (Ez[1:] - Ez[:-1]) * Sc / W0
+    Hy[1:] = Hy[1:] + (Ez[:-1] - Ez[1:]) * Sc / W0
     # Обновление Ez
-    Ez[1:] = Ez[1:] + (Hy[1:] - Hy[:-1]) * Sc * W0 / eps
+    Ez[:-1] = Ez[:-1] + (Hy[:-1] - Hy[1:]) * Sc * W0 / eps
     Ez[sourcePos] += A * np.sin(omega * q * dt + phi)
-    Hy[0] = 0  # идеальный магнитный проводник (PMC)
-    Ez[0] = Ez[1]
+
     # Правая граница (ABC)
     Ez[-1] = (k1 * (k2 * (Ez[-3] + Ezq1[-1]) + k3 * (Ezq[-1] + Ezq[-3] - Ez[-2] - Ezq1[-2]) - k4 * Ezq[-2]) - Ezq1[-3])
     # Обновление Ezq
